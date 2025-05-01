@@ -1,0 +1,9 @@
+---
+- name: Provision sentiment analyzer app
+  hosts: all
+  become: true
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
