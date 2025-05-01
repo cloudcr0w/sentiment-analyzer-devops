@@ -1,4 +1,7 @@
 # model/train.py
+# This is a basic training script for binary sentiment classification.
+# It uses logistic regression and TF-IDF vectorization on a small text dataset.
+
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
