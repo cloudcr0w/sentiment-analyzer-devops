@@ -1,9 +1,61 @@
 ---
-- name: Provision sentiment analyzer app
+- name: Provision EC2 for Sentiment API
   hosts: all
-  become: true
+  become: yes
+
+  vars:
+    app_dir: /home/ec2-user/sentiment-analyzer-devops
+
   tasks:
-    - name: Ensure Docker is installed
+    - name: Update system packages (Debian)
       apt:
-        name: docker.io
+        update_cache: yes
+        upgrade: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install dependencies (Debian)
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - git
         state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install dependencies (Amazon Linux)
+      yum:
+        name:
+          - python3
+          - python3-pip
+          - git
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Clone repository
+      git:
+        repo: https://github.com/cloudcr0w/sentiment-analyzer-devops.git
+        dest: "{{ app_dir }}"
+        version: main
+
+    - name: Install Python dependencies
+      pip:
+        requirements: "{{ app_dir }}/app/requirements.txt"
+        executable: pip3
+
+    - name: Ensure app directory is owned by ec2-user
+      file:
+        path: "{{ app_dir }}"
+        owner: ec2-user
+        group: ec2-user
+        recurse: yes
+
+    - name: Kill previous uvicorn if running (optional)
+      shell: |
+        pkill -f "uvicorn" || true
+      ignore_errors: yes
+
+    - name: Run FastAPI app (background screen)
+      shell: |
+        nohup uvicorn main:app --host 0.0.0.0 --port 8000 > /dev/null 2>&1 &
+      args:
+        chdir: "{{ app_dir }}/app"
