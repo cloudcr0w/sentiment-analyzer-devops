@@ -1,38 +1,27 @@
-# model/train.py
-# This is a basic training script for binary sentiment classification.
-# It uses logistic regression and TF-IDF vectorization on a small text dataset.
-
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
 import joblib
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
 
-# Sample dataset
-data = {
-    "text": [
-        "I love this product",
-        "This is the worst experience ever",
-        "Amazing quality and fast delivery",
-        "Terrible, I want my money back",
-        "Very satisfied with the service",
-        "Awful, do not recommend"
-    ],
-    "label": [1, 0, 1, 0, 1, 0]  # 1 = positive, 0 = negative
-}
+# Sample training data
+texts = [
+    "I love this product",
+    "This is the best thing ever",
+    "I hate it",
+    "This is terrible",
+    "Absolutely fantastic experience",
+    "Worst purchase I’ve made"
+]
+labels = ["positive", "positive", "negative", "negative", "positive", "negative"]
 
-df = pd.DataFrame(data)
+# Create vectorizer and model
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(texts)
 
-# Vectorize text
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(df["text"])
-y = df["label"]
+model = MultinomialNB()
+model.fit(X, labels)
 
-# Train model
-model = LogisticRegression()
-model.fit(X, y)
-
-# Save model and vectorizer
-joblib.dump(model, "model/model.pkl")
-joblib.dump(vectorizer, "model/vectorizer.pkl")
+# Save to disk
+joblib.dump(model, "model.pkl")
+joblib.dump(vectorizer, "vectorizer.pkl")
 
 print("Model and vectorizer saved.")
