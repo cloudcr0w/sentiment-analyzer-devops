@@ -14,3 +14,13 @@ variable "key_name" {
   description = "EC2 Key Pair name for SSH access"
   type        = string
 }
+variable "ami_id" {
+  description = "AMI ID for the EC2 instance"
+  type        = string
+}
+
+variable "instance_name" {
+  description = "Name tag for the EC2 instance"
+  type        = string
+  default     = "SentimentAnalyzer"
+}
