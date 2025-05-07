@@ -27,7 +27,7 @@ resource "aws_security_group" "fastapi_sg" {
 }
 
 resource "aws_instance" "fastapi_server" {
-  ami                    = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 (us-east-1), można później zmienić
+  ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.fastapi_sg.id]
@@ -35,6 +35,7 @@ resource "aws_instance" "fastapi_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "FastAPI-Sentiment-Instance"
+    Name = var.instance_name
   }
+
 }
