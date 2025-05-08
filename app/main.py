@@ -36,3 +36,7 @@ def predict_sentiment(data: TextInput):
     text_vector = vectorizer.transform([data.text])
     prediction = model.predict(text_vector)[0]
     return {"input": data.text, "sentiment": prediction}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
