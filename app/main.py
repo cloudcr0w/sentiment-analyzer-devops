@@ -77,4 +77,5 @@ def predict_sentiment(
 
 @app.get("/health")
 def health_check():
+    """Health check endpoint – returns basic service status"""
     return {"status": "ok"}
