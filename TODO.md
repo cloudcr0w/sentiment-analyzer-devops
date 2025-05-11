@@ -5,41 +5,41 @@ This file tracks pending tasks and development goals for the project.
 ## Completed
 - FastAPI backend initialized
 - Dockerfile created (base image: python:3.10-bookworm)
-- Terraform config for EC2 with security group
-- Ansible provisioning playbook (deploy.yml)
-- App deployed to EC2 via Ansible
 - Trained and saved basic ML model (Naive Bayes + CountVectorizer)
 - Connected model to `/predict` endpoint
 - Successfully tested prediction via Swagger UI (/docs)
+- `/health` endpoint added
+- Terraform setup: EC2 instance, security group, variables and output
+- Ansible playbook provisioning EC2 instance and deploying app
+- Added Makefile for simplified CLI automation
+- Added documentation for Terraform and Ansible directories
 
 ## In Progress / Planned
 
 ### Infrastructure (Terraform)
-- Output EC2 public IP
 - Optional: S3 bucket for model storage
-- Parameterize AMI ID and tags
+- Optional: Use remote backend (e.g. S3 + DynamoDB for state locking)
 
 ### Provisioning (Ansible)
-- Copy model.pkl and vectorizer.pkl to EC2
-- Convert uvicorn to systemd service
-- Add .env handling
-- Optional: Install and configure nginx for reverse proxy
+- Copy `model.pkl` and `vectorizer.pkl` to EC2 during provisioning
+- Convert `uvicorn` background task to `systemd` service
+- Add support for `.env` injection
+- Optional: Install and configure nginx as reverse proxy
 
 ### Application (FastAPI)
-- Add API key validation logic
+- Add API key validation logic (e.g. via `Header` or middleware)
 - Improve input validation and error handling
-- Add `/health` or `/status` endpoint for monitoring
+- Add `/metrics` or logging for request statistics
 
 ### Local Development
-- Add docker-compose.yml for local testing with .env support
-- Add Makefile with common targets (build, run, deploy)
+- Add `docker-compose.yml` for local testing
+- Expand Makefile with more commands (e.g., `test`, `lint`, `run-local`)
 
 ### Security
 - Add middleware for API key authorization
-- Add basic rate limiting or throttling
-- Optional: Add WAF or API Gateway (future work)
+- Add basic rate limiting (e.g., via IP)
+- Optional: Add WAF or expose via AWS API Gateway
 
 ### Documentation
-- terraform/README.md with usage instructions
-- ansible/README.md with setup and SSH guide
-- Architecture diagram (EC2, Ansible, FastAPI, model)
+- Add architecture diagram (EC2, FastAPI, Ansible, Terraform, model)
+- Add usage examples to project-level README
