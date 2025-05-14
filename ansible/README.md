@@ -1,12 +1,14 @@
-# Ansible Provisioning
+# Ansible – EC2 Provisioning for Sentiment Analyzer
 
-This playbook will be used to:
-- Set up Docker on EC2 instance
-- Pull the Docker image
-- Run the FastAPI container
-- Ensure idempotency and reusability
+This playbook installs required packages and deploys the FastAPI app on an EC2 instance.
 
-Host: AWS EC2 (Ubuntu)
+## What it does
+
+- Installs Python, pip, Git
+- Clones the GitHub repository
+- Installs app dependencies
+- Copies model files (`model.pkl`, `vectorizer.pkl`)
+- Starts the FastAPI app
 
 ## Usage
 
@@ -14,9 +16,13 @@ Host: AWS EC2 (Ubuntu)
 ansible-playbook -i hosts ansible/deploy.yml
 ```
 
-Make sure the instance is reachable via SSH and your SSH key is configured.
+Make sure:
 
-What it does
+Your SSH key is configured
+
+The EC2 instance is reachable (public IP, port 22 open)
+
+## What it does
 Installs Python, pip, git
 
 Clones the repo
