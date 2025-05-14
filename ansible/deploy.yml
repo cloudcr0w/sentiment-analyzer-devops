@@ -37,6 +37,14 @@
         dest: "{{ app_dir }}"
         version: main
 
+    - name: Copy model files to app directory
+      copy:
+        src: "../model/{{ item }}"
+        dest: "{{ app_dir }}/app/{{ item }}"
+      loop:
+        - model.pkl
+        - vectorizer.pkl
+
     - name: Install Python dependencies
       pip:
         requirements: "{{ app_dir }}/app/requirements.txt"
