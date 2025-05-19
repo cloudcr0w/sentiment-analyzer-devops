@@ -24,3 +24,8 @@ variable "instance_name" {
   type        = string
   default     = "SentimentAnalyzer"
 }
+
+variable "environment" {
+  type    = string
+  default = "dev"
+}
