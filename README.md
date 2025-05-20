@@ -3,7 +3,6 @@
 Minimal REST API for sentiment analysis using **FastAPI** + **scikit-learn**.  
 Infra via **Terraform** (EC2) + **Ansible** (provisioning). Secure and cloud-ready.
 
----
 
 ## ▶️ Stack
 
@@ -14,7 +13,18 @@ Infra via **Terraform** (EC2) + **Ansible** (provisioning). Secure and cloud-rea
 - `Docker` – optional container
 - `Kubernetes` – deployment manifests
 
----
+## ✅ Project Structure
+
+```bash
+app/         → FastAPI app code
+model/       → Trained model + vectorizer
+terraform/   → AWS IaC (EC2, SG)
+ansible/     → App provisioning (Python, Git, start app)
+kubernetes/  → Deployment YAMLs for K8s (optional)
+security/    → Auth, rate limiting, logging
+```
+
+![Deployment Diagram](./sentiment-diagram.png)
 
 ## 🔐 Security
 
@@ -74,16 +84,7 @@ curl -X POST http://<EC2_IP>:8000/predict \
   -d '{"text": "Awesome project!"}'
 ```
 
-### ✅ Project Structure
 
-```bash
-app/         → FastAPI app code
-model/       → Trained model + vectorizer
-terraform/   → AWS IaC (EC2, SG)
-ansible/     → App provisioning (Python, Git, start app)
-kubernetes/  → Deployment YAMLs for K8s (optional)
-security/    → Auth, rate limiting, logging
-```
 
 ### 👨‍💻 About the Author
 Created by Adam Wrona as part of his DevOps & Cloud Engineering journey 🚀
