@@ -2,31 +2,34 @@
 
 This playbook installs required packages and deploys the FastAPI app on an EC2 instance.
 
-## What it does
+## 🔧 What it does
 
 - Installs Python, pip, Git
 - Clones the GitHub repository
 - Installs app dependencies
 - Copies model files (`model.pkl`, `vectorizer.pkl`)
-- Starts the FastAPI app
+- Starts the FastAPI app on port 8000
 
-## Usage
+## ▶️ Usage
+
+1. Run `terraform apply` in the `terraform/` directory.
+
+2. After apply, copy the EC2 public IP from Terraform output:
+   ```bash
+   terraform output ec2_public_ip
+   ```
+
+3. Paste that IP into ansible/hosts like this:
+
+[all]
+44.203.xx.xx
+
+4. Run the playbook:
 
 ```bash
-ansible-playbook -i hosts ansible/deploy.yml
+ansible-playbook -i hosts deploy.yml --private-key ~/keys/crowKeyPairV2.pem -u ubuntu
 ```
 
-Make sure:
-
-Your SSH key is configured
-
-The EC2 instance is reachable (public IP, port 22 open)
-
-## What it does
-Installs Python, pip, git
-
-Clones the repo
-
-Installs dependencies
-
-Starts the FastAPI app on port 8000
+✅ Make sure your .pem key is in place
+✅ Port 22 is open (check Security Group)
+✅ The EC2 instance is running
