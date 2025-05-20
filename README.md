@@ -1,27 +1,104 @@
-A minimal sentiment analysis API built with FastAPI and scikit-learn. 
-This project demonstrates how to wrap a simple ML model in a containerized REST API, ready for deployment in AWS or Kubernetes.
+# 🧠 Sentiment Analyzer – ML API with FastAPI
 
-## Project Structure
+Minimal REST API for sentiment analysis using **FastAPI** + **scikit-learn**.  
+Infra via **Terraform** (EC2) + **Ansible** (provisioning). Secure and cloud-ready.
 
-- `app/` – FastAPI app and dependencies
-- `model/` – ML training script and artifacts
-- `terraform/` – AWS infrastructure as code
-- `ansible/` – server provisioning (Docker, app deployment)
-- `kubernetes/` – deployment YAMLs for K8s
-- `security/` – checklists and API protection logic
+---
 
-##  Secure-by-Design API Architecture
+## ▶️ Stack
 
-This FastAPI-based NLP service implements basic security layers to protect against common API threats:
+- `FastAPI` + `uvicorn`
+- `scikit-learn` (Naive Bayes)
+- `Terraform` – AWS EC2, SG
+- `Ansible` – installs & deploys app
+- `Docker` – optional container
+- `Kubernetes` – deployment manifests
 
-- **Token-based Authentication** (via `Authorization: Bearer <token>`)
-- **Rate Limiting** (max 5 requests per minute per IP)
-- **Abuse Logging** (unauthorized access, flood attempts)
-- **Dockerized for reproducibility and Kubernetes-ready**
+---
 
-These mechanisms demonstrate foundational API protection practices and can be extended for OAuth2, JWT, or third-party auth providers.
+## 🔐 Security
 
-## Security Features
 - `Authorization: Bearer <token>` required for `/predict`
-- Rate limiting: max 5 requests per minute per IP
-- Logs unauthorized access and abuse attempts to `security.log`
+- Rate limiting: 5 requests per minute per IP
+- Abuse logged to `security.log`
+
+---
+
+## 🧱 Deploy Flow
+
+🚀 DevOps Usage
+
+### 1. Deploy infrastructure
+```bash
+cd terraform
+terraform apply
+```
+
+### 2. Copy EC2 IP from terraform output to ansible/hosts
+
+```bash
+ Example:
+ [ec2]
+ 44.203.XX.XX ansible_user=ubuntu ansible_ssh_private_key_file=~/keys/crowKeyPairV2.pem
+```
+
+### 3. Run Ansible playbook
+
+```bash
+cd ../ansible
+ansible-playbook -i hosts deploy.yml
+```
+
+## 🌐 Access API
+
+Swagger UI: http://<EC2_IP>:8000/docs
+
+POST to /predict with JSON body:
+
+```json
+
+{
+  "text": "Awesome project!"
+}
+```
+
+And header:
+
+Authorization: Bearer your-token
+
+for example :
+```bash
+curl -X POST http://<EC2_IP>:8000/predict \
+  -H "Authorization: Bearer your-token" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Awesome project!"}'
+```
+
+### ✅ Project Structure
+
+```bash
+app/         → FastAPI app code
+model/       → Trained model + vectorizer
+terraform/   → AWS IaC (EC2, SG)
+ansible/     → App provisioning (Python, Git, start app)
+kubernetes/  → Deployment YAMLs for K8s (optional)
+security/    → Auth, rate limiting, logging
+```
+
+### 👨‍💻 About the Author
+Created by Adam Wrona as part of his DevOps & Cloud Engineering journey 🚀
+I'm open to feedback, improvements and contributions — feel free to fork or reach out!
+
+### 💡 Like this project?
+
+⭐ Star it on GitHub
+
+🍴 Fork it
+
+🧠 Share your ideas in Issues/Discussions
+
+```diff
++ “99% of debugging is staring at the screen in disbelief.”
++ „99% debugowania to patrzenie w ekran z niedowierzaniem.”
++ — prawie prawda™
+```
