@@ -68,7 +68,7 @@
 
           [Install]
           WantedBy=multi-user.target
-          
+
     - name: Reload systemd
       shell: systemctl daemon-reexec
 
@@ -84,14 +84,3 @@
         owner: ubuntu
         group: ubuntu
         recurse: yes
-
-    - name: Kill previous uvicorn process if running
-      shell: |
-        pkill -f "uvicorn" || true
-      ignore_errors: yes
-
-    - name: Run FastAPI app in background
-      shell: |
-        nohup uvicorn main:app --host 0.0.0.0 --port 8000 > /dev/null 2>&1 &
-      args:
-        chdir: "{{ app_dir }}/app"
