@@ -41,6 +41,11 @@
       args:
         creates: "{{ app_dir }}/app/{{ item }}"
 
+    - name: Upload .env file with API key (placeholder)
+        copy:
+          dest: "{{ app_dir }}/app/.env"
+        content: |
+          API_KEY=supersecret123
 
     - name: Install Python requirements
       pip:
