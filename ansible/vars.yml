@@ -1,1 +1,2 @@
 app_dir: /home/ec2-user/sentiment-analyzer-devops
+s3_bucket: sentiment-analyzer-models-73344a11

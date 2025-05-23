@@ -27,14 +27,20 @@
         repo: https://github.com/cloudcr0w/sentiment-analyzer-devops.git
         dest: "{{ app_dir }}"
         version: main
+    - name: Install AWS CLI
+        apt:
+          name: awscli
+          state: present
 
-    - name: Copy model files to app directory
-      copy:
-        src: "{{ playbook_dir }}/../model/{{ item }}"
-        dest: "{{ app_dir }}/app/{{ item }}"
+    - name: Download model files from S3
+      shell: |
+        aws s3 cp s3://{{ s3_bucket }}/{{ item }} {{ app_dir }}/app/{{ item }}
       loop:
         - model.pkl
         - vectorizer.pkl
+      args:
+        creates: "{{ app_dir }}/app/{{ item }}"
+
 
     - name: Install Python requirements
       pip:
