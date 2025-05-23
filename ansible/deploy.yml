@@ -51,7 +51,7 @@
       pip:
         requirements: "{{ app_dir }}/app/requirements.txt"
         executable: pip3
-        
+
     - name: Add systemd service for FastAPI
       copy:
         dest: /etc/systemd/system/sentiment.service
@@ -68,6 +68,15 @@
 
           [Install]
           WantedBy=multi-user.target
+          
+    - name: Reload systemd
+      shell: systemctl daemon-reexec
+
+    - name: Enable and start FastAPI service
+      systemd:
+        name: sentiment
+        enabled: yes
+        state: restarted
 
     - name: Ensure app directory is owned by ubuntu user
       file:
