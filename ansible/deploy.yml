@@ -51,6 +51,23 @@
       pip:
         requirements: "{{ app_dir }}/app/requirements.txt"
         executable: pip3
+        
+    - name: Add systemd service for FastAPI
+      copy:
+        dest: /etc/systemd/system/sentiment.service
+        content: |
+          [Unit]
+          Description=Sentiment Analyzer API
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          WorkingDirectory={{ app_dir }}/app
+          ExecStart=/usr/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
 
     - name: Ensure app directory is owned by ubuntu user
       file:
