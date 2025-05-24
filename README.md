@@ -84,6 +84,24 @@ curl -X POST http://<EC2_IP>:8000/predict \
   -d '{"text": "Awesome project!"}'
 ```
 
+---
+
+## 🔍 For Reviewers
+
+This project demonstrates:
+
+✅ Infrastructure as Code (Terraform – EC2, S3)  
+✅ Provisioning with Ansible (app deploy, model from S3)  
+✅ ML API (FastAPI + Naive Bayes)  
+✅ Deployment-ready structure with systemd service  
+✅ GitHub Actions planned for CI/CD
+
+🧪 Try it out:
+- `curl http://<your-ec2-ip>:8000/health`
+- Swagger UI: `http://<your-ec2-ip>:8000/docs`
+- or run it locally via Docker/Ansible
+
+> Reach out if you’d like a full demo or want to discuss implementation.
 
 
 ### 👨‍💻 About the Author
