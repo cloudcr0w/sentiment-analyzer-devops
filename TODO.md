@@ -1,45 +1,41 @@
 # Project TODO – Sentiment Analyzer DevOps
 
-This file tracks pending tasks and development goals for the project.
+This file tracks development goals and remaining tasks.
 
-## Completed
+## ✅ Completed
 - FastAPI backend initialized
 - Dockerfile created (base image: python:3.10-bookworm)
 - Trained and saved basic ML model (Naive Bayes + CountVectorizer)
 - Connected model to `/predict` endpoint
-- Successfully tested prediction via Swagger UI (/docs)
 - `/health` endpoint added
-- Terraform setup: EC2 instance, security group, variables and output
-- Ansible playbook provisioning EC2 instance and deploying app
-- Added Makefile for simplified CLI automation
-- Added documentation for Terraform and Ansible directories
+- Terraform: EC2 instance, security group, S3 bucket, outputs
+- Ansible: provisioning with app clone, pip install, `.env` injection
+- Model files pulled from S3 in Ansible
+- FastAPI runs as systemd service
+- README split: main + REVIEW_GUIDE
+- Added Makefile
+- Kubernetes manifests with usage doc
+- Diagram added to main README
 
-## In Progress / Planned
+## 🛠️ Still To Do
 
 ### Infrastructure (Terraform)
-- Optional: S3 bucket for model storage
-- Optional: Use remote backend (e.g. S3 + DynamoDB for state locking)
-
-### Provisioning (Ansible)
-- Copy `model.pkl` and `vectorizer.pkl` to EC2 during provisioning
-- Convert `uvicorn` background task to `systemd` service
-- Add support for `.env` injection
-- Optional: Install and configure nginx as reverse proxy
+- (Optional) Use remote backend (S3 + DynamoDB)
 
 ### Application (FastAPI)
-- Add API key validation logic (e.g. via `Header` or middleware)
-- Improve input validation and error handling
-- Add `/metrics` or logging for request statistics
+- Add API key middleware ✅ (planned/ready)
+- Add basic rate limiting (e.g. per IP)
+- Improve input validation & error responses
+- Add `/metrics` endpoint or Prometheus logging
 
-### Local Development
-- Add `docker-compose.yml` for local testing
-- Expand Makefile with more commands (e.g., `test`, `lint`, `run-local`)
+### Local Dev / CI
+- Add `docker-compose.yml` for local dev (optional)
+- Extend Makefile: `run-local`, `test`, `lint`
+- Add CI/CD GitHub Actions workflow (build + lint)
 
-### Security
-- Add middleware for API key authorization
-- Add basic rate limiting (e.g., via IP)
-- Optional: Add WAF or expose via AWS API Gateway
+### Security / Hardening
+- Add logging of abuse attempts to `security.log`
+- Restrict CORS / IPs in FastAPI
+- Dockerfile hardening (no root user)
+- (Optional) Add WAF or deploy via API Gateway
 
-### Documentation
-- Add architecture diagram (EC2, FastAPI, Ansible, Terraform, model)
-- Add usage examples to project-level README
