@@ -1,5 +1,6 @@
 # 🧠 Sentiment Analyzer – ML API with FastAPI
-![Visitor Badge](https://visitor-badge.glitch.me/badge?page_id=cloudcr0w.sentiment-analyzer-devops&left_color=blue&right_color=green)
+![Visitors](https://visitor-badge.laobi.icu/badge?page_id=cloudcr0w.sentiment-analyzer-devops)
+
 
 Minimal REST API for sentiment analysis using **FastAPI** + **scikit-learn**.  
 Infra via **Terraform** (EC2) + **Ansible** (provisioning). Secure and cloud-ready.
