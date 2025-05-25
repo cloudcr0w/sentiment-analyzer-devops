@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
 import joblib
 import os
 import time
@@ -8,74 +10,82 @@ from collections import defaultdict
 
 app = FastAPI()
 
-# ===== Security Config =====
+# === CORS configuration ===
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[],  # leave empty to block all external origins (adjust when frontend is added)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# === Security settings ===
 API_KEY = "supersecrettoken"
-RATE_LIMIT = 5  # max 5 reqs
-TIME_WINDOW = 60  # seconds
+RATE_LIMIT = 5         # max number of requests
+TIME_WINDOW = 60       # time window in seconds
 
 rate_limit_cache = defaultdict(list)
 
-# ===== Logging Setup =====
-logging.basicConfig(filename="security.log", level=logging.INFO)
+# === Logging setup ===
+logging.basicConfig(
+    filename="security.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-# ===== Security Dependencies =====
+# === Token verification ===
 def verify_token(request: Request):
     token = request.headers.get("Authorization")
     if token != f"Bearer {API_KEY}":
-        logging.warning(f"Unauthorized access attempt from {request.client.host}")
+        logging.warning(f"Unauthorized request from IP {request.client.host}")
         raise HTTPException(status_code=403, detail="Unauthorized")
 
+# === Basic IP rate limiter ===
 def rate_limiter(request: Request):
     ip = request.client.host
     now = time.time()
-    requests = rate_limit_cache[ip]
+    recent = [t for t in rate_limit_cache[ip] if now - t < TIME_WINDOW]
+    rate_limit_cache[ip] = recent
 
-    # keep only requests within TIME_WINDOW
-    rate_limit_cache[ip] = [t for t in requests if now - t < TIME_WINDOW]
-
-    if len(rate_limit_cache[ip]) >= RATE_LIMIT:
-        logging.warning(f"Rate limit exceeded for {ip}")
+    if len(recent) >= RATE_LIMIT:
+        logging.warning(f"Rate limit exceeded for IP {ip}")
         raise HTTPException(status_code=429, detail="Too Many Requests")
 
     rate_limit_cache[ip].append(now)
 
-# ===== ML Model Loading =====
-model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
-vectorizer_path = os.path.join(os.path.dirname(__file__), "vectorizer.pkl")
-
+# === Load ML model and vectorizer ===
 try:
+    model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
+    vectorizer_path = os.path.join(os.path.dirname(__file__), "vectorizer.pkl")
     model = joblib.load(model_path)
     vectorizer = joblib.load(vectorizer_path)
-except Exception:
+except Exception as e:
+    print("Failed to load model:", e)
     model = None
     vectorizer = None
-    import traceback
-    print("Failed to load model:")
-    traceback.print_exc()
 
-# ===== Data Schema =====
+# === Input schema ===
 class TextInput(BaseModel):
     text: str
 
-# ===== Endpoints =====
+# === API Endpoints ===
 @app.get("/")
-def read_root():
+def root():
     return {"message": "Sentiment Analyzer API is running"}
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 @app.post("/predict")
-def predict_sentiment(
+def predict(
     data: TextInput,
     _: None = Depends(verify_token),
     __: None = Depends(rate_limiter)
 ):
     if not model or not vectorizer:
         raise HTTPException(status_code=500, detail="Model not loaded")
-    
+
     text_vector = vectorizer.transform([data.text])
     prediction = model.predict(text_vector)[0]
     return {"input": data.text, "sentiment": prediction}
-
-@app.get("/health")
-def health_check():
-    """Health check endpoint – returns basic service status"""
-    return {"status": "ok"}
