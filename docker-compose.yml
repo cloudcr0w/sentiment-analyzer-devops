@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  sentiment-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    container_name: sentiment-analyzer
+    environment:
+      - API_KEY=supersecrettoken
+    volumes:
+      - ./app:/app
