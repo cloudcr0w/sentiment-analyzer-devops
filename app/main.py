@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 import joblib
 import os
 import time
@@ -64,9 +63,9 @@ except Exception as e:
     model = None
     vectorizer = None
 
-# === Input schema ===
+# === Input schema with validation ===
 class TextInput(BaseModel):
-    text: str
+    text: str = Field(..., min_length=3, description="Text must be at least 3 characters long")
 
 # === API Endpoints ===
 @app.get("/")
