@@ -76,6 +76,10 @@ def root():
 def health():
     return {"status": "ok"}
 
+@app.get("/version")
+def version():
+    return {"version": "1.0.0"}
+
 @app.post("/predict")
 def predict(
     data: TextInput,
