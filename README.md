@@ -1,4 +1,5 @@
 # 🧠 Sentiment Analyzer – ML API with FastAPI
+
 ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=cloudcr0w.sentiment-analyzer-devops)
 ![K8s Ready](https://img.shields.io/badge/Kubernetes-Ready-blue?logo=kubernetes)
 
