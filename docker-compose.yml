@@ -12,3 +12,4 @@ services:
       - API_KEY=supersecrettoken
     volumes:
       - ./app:/app
+    restart: unless-stopped
