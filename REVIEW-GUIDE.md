@@ -27,6 +27,15 @@ cd ../ansible
 ansible-playbook -i hosts deploy.yml
 ```
 
+## 🧪 Local test: 
+```bash
+docker-compose up --build
+``` 
+or 
+```bash
+make compose-up
+```
+
 ## 🌐 Access API
 
 Swagger UI: http://<EC2_IP>:8000/docs
