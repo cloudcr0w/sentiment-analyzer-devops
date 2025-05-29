@@ -92,3 +92,12 @@ def predict(
     text_vector = vectorizer.transform([data.text])
     prediction = model.predict(text_vector)[0]
     return {"input": data.text, "sentiment": prediction}
+
+@app.get("/logs")
+def get_logs():
+    try:
+        with open("security.log", "r") as f:
+            lines = f.readlines()
+            return {"logs": lines[-10:]}  # it gives last 10 lines 
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Log file not found")
