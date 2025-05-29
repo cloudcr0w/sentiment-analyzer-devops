@@ -1,4 +1,4 @@
-.PHONY: init plan apply deploy run-local lint
+.PHONY: init plan apply deploy run-local lint build compose-up
 
 init:
 	cd terraform && terraform init
@@ -17,3 +17,9 @@ run-local:
 
 lint:
 	black app/
+
+build:
+	docker build -t sentiment-api .
+
+compose-up:
+	docker-compose up --build
