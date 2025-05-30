@@ -2,6 +2,8 @@
 
 ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=cloudcr0w.sentiment-analyzer-devops)
 ![K8s Ready](https://img.shields.io/badge/Kubernetes-Ready-blue?logo=kubernetes)
+![CI](https://github.com/cloudcr0w/sentiment-analyzer-devops/actions/workflows/main.yml/badge.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
 
 Minimal REST API for sentiment analysis using **FastAPI** + **scikit-learn**.  
