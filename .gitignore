@@ -9,3 +9,4 @@ terraform/.terraform.lock.hcl
 terraform/*
 *.pyc
 security.log
+.env
