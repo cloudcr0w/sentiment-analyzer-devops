@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 # === Security settings ===
-API_KEY = "supersecrettoken"
+API_KEY = os.getenv("API_KEY", "supersecrettoken")
 RATE_LIMIT = 5         # max number of requests
 TIME_WINDOW = 60       # time window in seconds
 
