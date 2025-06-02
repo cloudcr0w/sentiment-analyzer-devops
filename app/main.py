@@ -6,8 +6,10 @@ import os
 import time
 import logging
 from collections import defaultdict
+# from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+# Instrumentator().instrument(app).expose(app)
 
 # === CORS configuration ===
 app.add_middleware(
