@@ -6,54 +6,66 @@ This file tracks development goals and remaining tasks.
 
 ## ✅ Completed
 
-- FastAPI backend initialized (`main.py`)
-- Dockerfile created (Python 3.10, Bookworm)
-- ML model trained (Naive Bayes + CountVectorizer)
-- `/predict` and `/health` endpoints added
-- Input validation with Pydantic (`min_length`)
-- API key auth via `.env`
-- Rate limiting by IP (custom middleware)
-- Logging to `security.log`
-- Terraform: EC2 + SG + S3 bucket + outputs
-- Ansible: provisioning, model download from S3, systemd deploy
-- Docker Compose for local dev
-- Kubernetes manifests (`deployment.yaml`, `service.yaml`)
-- Added `/version` and `/logs` endpoints
-- Project diagram + split README and REVIEW_GUIDE
-- Added Makefile with `run-local`, `lint`
-- Directory structure cleaned (`__init__.py`, `env.example`)
-- `app/` marked as Python package
+- **FastAPI backend** initialized (`main.py`)
+- **Machine Learning model** trained (Naive Bayes + CountVectorizer)
+- Endpoints: `/predict`, `/health`, `/version`, `/logs`
+- **Input validation** with Pydantic (`min_length`)
+- **Auth & Security**:
+  - API key auth via `.env`
+  - Rate limiting by IP (custom middleware)
+  - Logging to `security.log`
+- **Infrastructure**:
+  - Terraform: EC2 + SG + S3 bucket + outputs
+  - Ansible: provisioning, model download from S3, systemd deploy
+- **Containers**:
+  - Dockerfile created (Python 3.10, Debian Bookworm)
+  - Docker Compose for local dev
+- **Kubernetes** manifests: `deployment.yaml`, `service.yaml`
+- **Tooling**:
+  - Makefile with `run-local`, `lint`
+  - Directory structure cleaned (`__init__.py`, `env.example`)
+- **Docs**:
+  - Project diagram
+  - Split `README.md` and `REVIEW_GUIDE.md`
+  - `app/` marked as Python package
 
 ---
 
 ## 🔧 Still To Do
 
 ### 📦 Infrastructure (Terraform)
-- (Optional) Add remote backend with S3 + DynamoDB state locking
+- (Optional) Add **remote backend** (S3 + DynamoDB for state locking)
+- (Optional) Add **API Gateway** or ALB for secure API exposure
 
 ### ⚙️ CI/CD & Automation
-- Add GitHub Actions workflow (build, lint, test)
-- Add Makefile: `build`, `docker-run`, `compose-up`
+- Add **GitHub Actions workflow** (build → lint → test → deploy)
+- Extend **Makefile**: `build`, `docker-run`, `compose-up`
 
 ### 🔐 Security / Hardening
-- Dockerfile: switch to non-root user
-- (Optional) Add WAF or expose API via AWS API Gateway
+- Dockerfile: switch to **non-root user**
+- Store secrets in **Kubernetes Secret** or **AWS SSM**
 
 ### 📈 Monitoring / Observability
-- Add `/metrics` endpoint or Prometheus integration
-- Log request counts / stats
+- Add `/metrics` endpoint (Prometheus format)
+- Collect request counts, latency, error rates
+- (Optional) Dashboard in **Grafana** / CloudWatch
 
 ### 📦 Packaging & Delivery
-- Publish image to DockerHub (or ECR)
-- Use `ConfigMap` / `Secret` in Kubernetes for API_KEY
+- Publish Docker image to **DockerHub** (or AWS ECR)
+- Kubernetes: replace hardcoded envs with **ConfigMap** + **Secret**
 
-### 🧪 Tests (optional)
-- Add unit test for `/predict`
-- Integrate with pytest / coverage
+### 🧪 Tests
+- Unit test for `/predict` with pytest
+- Add coverage badge to repo
 
 ---
 
 ## 📝 Notes
 
-This is an MVP-level fullstack DevOps project showing IaC, security, CI readiness and cloud-native packaging.  
-Use `REVIEW_GUIDE.md` to deploy end-to-end and `docker-compose.yml` for quick local testing.
+This project demonstrates a **cloud-native DevOps workflow**:  
+- Infrastructure as Code (Terraform + Ansible)  
+- Containerization & Orchestration (Docker, Kubernetes)  
+- Security-first design (auth, rate limiting, logging)  
+- CI/CD readiness (GitHub Actions planned)  
+
+👉 Use `REVIEW_GUIDE.md` for deployment instructions and `docker-compose.yml` for local testing.

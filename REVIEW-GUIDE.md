@@ -1,68 +1,90 @@
 # Review Guide
 
-## Quick Start
+End-to-end deployment & testing instructions for **Sentiment Analyzer DevOps**.
 
-## 🧱 Deploy Flow
+---
 
-🚀 DevOps Usage
+## 🧱 Deploy Flow (Cloud)
 
-### 1. Deploy infrastructure
+### 1. Provision infrastructure (Terraform)
 ```bash
 cd terraform
+terraform init
 terraform apply
 ```
+Outputs will include the EC2 public IP.
 
-### 2. Copy EC2 IP from terraform output to ansible/hosts
 
+### 2. Configure Ansible inventory
+
+Copy the EC2 IP from Terraform output into ansible/hosts:
 ```bash
- Example:
- [ec2]
- 44.203.XX.XX ansible_user=ubuntu ansible_ssh_private_key_file=~/keys/crowKeyPairV2.pem
+[ec2]
+44.203.XX.XX ansible_user=ubuntu ansible_ssh_private_key_file=~/keys/crowKeyPairV2.pem
 ```
 
 ### 3. Run Ansible playbook
-
 ```bash
 cd ../ansible
 ansible-playbook -i hosts deploy.yml
 ```
 
-## 🧪 Local test: 
+### This will:
+
+install dependencies
+
+download ML model from S3
+
+configure systemd service
+
+start API backend
+
+### 🧪 Local Testing
+
+Run locally with Docker Compose:
 ```bash
 docker-compose up --build
-``` 
-or 
+```
+or via Makefile shortcut:
 ```bash
-make compose-up
+or via Makefile shortcut:
 ```
 
-## 🌐 Access API
+Then access:
 
-Swagger UI: http://<EC2_IP>:8000/docs
+Healthcheck → http://localhost:8000/health
 
-POST to /predict with JSON body:
+Docs (Swagger UI) → http://localhost:8000/docs
 
-```json
+### 🌐 Access Deployed API
 
-{
-  "text": "Awesome project!"
-}
+Swagger UI:
+```bash
+http://<EC2_IP>:8000/docs
 ```
 
-And header:
-
-Authorization: Bearer your-token
-
-for example :
+Health check:
 ```bash
+curl http://<EC2_IP>:8000/health
+```
+
+Prediction example (with API key):
+```bash
+
+export API_KEY="your-token"
+
 curl -X POST http://<EC2_IP>:8000/predict \
-  -H "Authorization: Bearer your-token" \
+  -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"text": "Awesome project!"}'
 ```
 
----
-🧪 Try it out:
-- `curl http://<your-ec2-ip>:8000/health`
-- Swagger UI: `http://<your-ec2-ip>:8000/docs`
-- or run it locally via Docker/Ansible
+### 📝 Notes
+
+Replace <EC2_IP> with the public IP from Terraform outputs.
+
+Ansible requires SSH access (key must match the Terraform EC2 keypair).
+
+Logs are stored in security.log on the server.
+
+Local vs Cloud behavior is the same (same Docker image).
